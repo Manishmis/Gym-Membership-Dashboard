@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MMA Gym Analytics Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #8b5cf6, #0ea5e9);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+           text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+ }
+        
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            max-width: 700px;
+            margin: 0 auto;
+            color: #cbd5e1;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(124, 58, 237, 0.4);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(124, 58, 237, 0.3);
+        }
+        
+        .card-header i {
+            font-size: 1.8rem;
+            margin-right: 15px;
+            background: linear-gradient(45deg, #8b5cf6, #0ea5e9);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .card-header h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+        
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+        
+        .data-entry {
+            grid-column: span 2;
+            background: rgba(30, 41, 59, 0.8);
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            margin-bottom: 8px;
+            font-weight: 500;
+            opacity: 0.9;
+            color: #cbd5e1;
+        }
+        
+        .form-group input, 
+        .form-group select {
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(15, 23, 42, 0.5);
+            color: white;
+            font-size: 1rem;
+            border: 1px solid rgba(124, 58, 237, 0.3);
+        }
+        
+        .form-group input:focus, 
+        .form-group select:focus {
+            outline: none;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(124, 58, 237, 0.6);
+        }
+        
+        button {
+            background: linear-gradient(45deg, #8b5cf6, #0ea5e9);
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 25px;
+            grid-column: span 2;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+        }
+        
+        .inactive-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .inactive-table th {
+            background: rgba(30, 41, 59, 0.9);
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #e2e8f0;
+            border-bottom: 2px solid rgba(124, 58, 237, 0.5);
+        }
+        
+        .inactive-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(124, 58, 237, 0.2);
+            color: #cbd5e1;
+        }
+        
+        .inactive-table tr:nth-child(even) {
+            background: rgba(15, 23, 42, 0.3);
+        }
+        
+        .inactive-table tr:hover {
+            background: rgba(30, 41, 59, 0.5);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        
+        .status-inactive {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            background: rgba(16, 185, 129, 0.9);
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(120%);
+            transition: transform 0.4s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.error {
+            background: rgba(239, 68, 68, 0.9);
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        }
+        
+        .stat-card i {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #8b5cf6, #0ea5e9);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .stat-card .value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            background: linear-gradient(to right, #8b5cf6, #0ea5e9);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .stat-card .label {
+            font-size: 1rem;
+            opacity: 0.8;
+            color: #cbd5e1;
+        }
+        
+        @media (max-width: 900px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .data-entry {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="notification" id="notification">
+        Data added successfully!
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-dumbbell"></i> MMA Gym Analytics Dashboard</h1>
+            <p>Track member attendance, facility usage, and membership trends</p>
+        </header>
+        
+        <div class="stats-container">
+            <div class="stat-card">
+                <i class="fas fa-users"></i>
+                <div class="value">124</div>
+                <div class="label">Total Members</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-calendar-check"></i>
+                <div class="value">83%</div>
+                <div class="label">Monthly Attendance</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-running"></i>
+                <div class="value">90</div>
+                <div class="label">Avg. Daily Check-ins</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-sync-alt"></i>
+                <div class="value">60%</div>
+                <div class="label">Renewal Rate</div>
+            </div>
+        </div>
+        
+        <div class="dashboard-grid">
+            <!-- Daily Check-ins Chart -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-chart-line"></i>
+                    <h2>Daily Check-ins</h2>
+                </div>
+                <div class="chart-container">
+                    <canvas id="lineChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Popular Gym Areas -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-chart-bar"></i>
+                    <h2>Popular Gym Areas</h2>
+                </div>
+                <div class="chart-container">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Membership Types -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-chart-pie"></i>
+                    <h2>Membership Types</h2>
+                </div>
+                <div class="chart-container">
+                    <canvas id="pieChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Inactive Members -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h2>Inactive Members</h2>
+                </div>
+                <div>
+                    <table class="inactive-table">
+                        <thead>
+                            <tr>
+                                <th>Member ID</th>
+                                <th>Name</th>
+                                <th>Last Visit</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inactiveMembers">
+                            <tr>
+                                <td>M101</td>
+                                <td>Manish Kumar Mishra</td>
+                                <td>15 days ago</td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                            </tr>
+                            <tr>
+                                <td>M105</td>
+                                <td>Manash Kumar Mishra</td>
+                                <td>32 days ago</td>
+                                <td><span class="status-badge status-inactive">Inactive</span></td>
+                            </tr>
+                            <tr>
+                                <td>M109</td>
+                                <td>Anish Kumar Mishra</td>
+                                <td>45 days ago</td>
+                                <td><span class="status-badge status-inactive">Inactive</span></td>
+                            </tr>
+                            <tr>
+                                <td>M112</td>
+                                <td>Mohan Mishra</td>
+                                <td>28 days ago</td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                            </tr>
+                            <tr>
+                                <td>M115</td>
+                                <td>Mamta Mishra</td>
+                                <td>62 days ago</td>
+                                <td><span class="status-badge status-inactive">Inactive</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Data Entry Form -->
+            <div class="card data-entry">
+                <div class="card-header">
+                    <i class="fas fa-edit"></i>
+                    <h2>Add New Check-in</h2>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="memberId">Member ID</label>
+                        <input type="text" id="memberId" placeholder="e.g., M101">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" placeholder="e.g., Manish Kumar Mishra">
+                    </div>
+                    <div class="form-group">
+                        <label for="checkInDate">Check-in Date</label>
+                        <input type="date" id="checkInDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="areaUsed">Area Used</label>
+                        <select id="areaUsed">
+                            <option value="Cardio">Cardio Area</option>
+                            <option value="Weights">Weights Area</option>
+                            <option value="Pool">Swimming Pool</option>
+                            <option value="Yoga">Yoga Studio</option>
+                            <option value="Crossfit">Crossfit Zone</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="membershipType">Membership Type</label>
+                        <select id="membershipType">
+                            <option value="Premium">Premium</option>
+                            <option value="Standard">Standard</option>
+                            <option value="Student">Student</option>
+                            <option value="Corporate">Corporate</option>
+                            <option value="Senior">Senior</option>
+                        </select>
+                    </div>
+                    <button id="addDataBtn"><i class="fas fa-plus-circle"></i> Add Check-in Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize charts with sample data
+        document.addEventListener('DOMContentLoaded', function() {
+            // Line Chart - Daily Check-ins
+            const lineCtx = document.getElementById('lineChart').getContext('2d');
+            const lineChart = new Chart(lineCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Check-ins per Day',
+                        data: [85, 72, 86, 90, 110, 95, 80],
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#e2e8f0'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#cbd5e1'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#cbd5e1'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Bar Chart - Popular Gym Areas
+            const barCtx = document.getElementById('barChart').getContext('2d');
+            const barChart = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Cardio', 'Weights', 'Pool', 'Yoga', 'Crossfit'],
+                    datasets: [{
+                        label: 'Usage Count',
+                        data: [120, 95, 70, 60, 85],
+                        backgroundColor: [
+                            'rgba(139, 92, 246, 0.7)',
+                            'rgba(14, 165, 233, 0.7)',
+                            'rgba(236, 72, 153, 0.7)',
+                            'rgba(16, 185, 129, 0.7)',
+                            'rgba(245, 158, 11, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(139, 92, 246, 1)',
+                            'rgba(14, 165, 233, 1)',
+                            'rgba(236, 72, 153, 1)',
+                            'rgba(16, 185, 129, 1)',
+                            'rgba(245, 158, 11, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#cbd5e1'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#cbd5e1'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Pie Chart - Membership Types
+            const pieCtx = document.getElementById('pieChart').getContext('2d');
+            const pieChart = new Chart(pieCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Premium', 'Standard', 'Student', 'Corporate', 'Senior'],
+                    datasets: [{
+                        data: [35, 25, 20, 15, 5],
+                        backgroundColor: [
+                            'rgba(139, 92, 246, 0.7)',
+                            'rgba(14, 165, 233, 0.7)',
+                            'rgba(236, 72, 153, 0.7)',
+                            'rgba(16, 185, 129, 0.7)',
+                            'rgba(245, 158, 11, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 255, 255, 0.8)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                color: '#e2e8f0',
+                                padding: 20
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Add data button functionality
+            document.getElementById('addDataBtn').addEventListener('click', function() {
+                const memberId = document.getElementById('memberId').value;
+                const name = document.getElementById('name').value;
+                const checkInDate = document.getElementById('checkInDate').value;
+                const areaUsed = document.getElementById('areaUsed').value;
+                const membershipType = document.getElementById('membershipType').value;
+                
+                if (!memberId || !name || !checkInDate) {
+                    showNotification('Please fill in all required fields', 'error');
+                    return;
+                }
+                
+                // Show success notification
+                showNotification('Check-in data added successfully!');
+                
+                // Reset form
+                document.getElementById('memberId').value = '';
+                document.getElementById('name').value = '';
+                document.getElementById('checkInDate').value = '';
+                document.getElementById('areaUsed').value = 'Cardio';
+                document.getElementById('membershipType').value = 'Premium';
+                
+                // Update charts with new data (simulated)
+                simulateDataUpdate();
+            });
+            
+            // Set today's date as default for check-in date
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('checkInDate').value = today;
+            
+            // Notification function
+            function showNotification(message, type = 'success') {
+                const notification = document.getElementById('notification');
+                notification.textContent = message;
+                
+                // Set background color based on type
+                if (type === 'success') {
+                    notification.style.background = 'rgba(16, 185, 129, 0.9)';
+                    notification.classList.remove('error');
+                } else {
+                    notification.style.background = 'rgba(239, 68, 68, 0.9)';
+                    notification.classList.add('error');
+                }
+                
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+            
+            // Simulate data update
+            function simulateDataUpdate() {
+                // Simulate updating the bar chart data
+                const barData = barChart.data.datasets[0].data;
+                for (let i = 0; i < barData.length; i++) {
+                    barData[i] += Math.floor(Math.random() * 5);
+                }
+                barChart.update();
+                
+                // Simulate updating the line chart data
+                const lineData = lineChart.data.datasets[0].data;
+                const lastValue = lineData[lineData.length - 1];
+                lineData.shift();
+                lineData.push(lastValue + Math.floor(Math.random() * 10));
+                lineChart.update();
+                
+                // Simulate updating the pie chart
+                const pieData = pieChart.data.datasets[0].data;
+                const randomIndex = Math.floor(Math.random() * pieData.length);
+                pieData[randomIndex] += 2;
+                pieChart.update();
+            }
+        });
+    </script>
+</body>
+</html>
