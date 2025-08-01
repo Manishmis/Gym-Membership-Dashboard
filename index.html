@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MMA Gym Analytics Dashboard</title>
+    <title>GymFit - Gym Performance Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -11,11 +11,11 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', 'Poppins', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #0f172a, #1e293b);
+            background: linear-gradient(135deg, #0c1526, #1a2439);
             color: #fff;
             min-height: 100vh;
             padding: 20px;
@@ -30,19 +30,19 @@
             text-align: center;
             padding: 20px 0;
             margin-bottom: 30px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 2px solid rgba(124, 58, 237, 0.5);
             position: relative;
         }
         
         header h1 {
             font-size: 2.8rem;
             margin-bottom: 10px;
-            background: linear-gradient(to right, #8b5cf6, #0ea5e9);
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-           text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
- }
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
         
         header p {
             font-size: 1.2rem;
@@ -65,28 +65,28 @@
             padding: 25px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(124, 58, 237, 0.2);
+            border: 1px solid rgba(255, 126, 95, 0.3);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(99, 102, 241, 0.2);
-            border: 1px solid rgba(124, 58, 237, 0.4);
+            box-shadow: 0 15px 30px rgba(255, 126, 95, 0.2);
         }
         
         .card-header {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             margin-bottom: 20px;
             padding-bottom: 15px;
-            border-bottom: 1px solid rgba(124, 58, 237, 0.3);
+            border-bottom: 1px solid rgba(255, 126, 95, 0.3);
         }
         
         .card-header i {
             font-size: 1.8rem;
             margin-right: 15px;
-            background: linear-gradient(45deg, #8b5cf6, #0ea5e9);
+            background: linear-gradient(45deg, #ff7e5f, #feb47b);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -96,6 +96,8 @@
             font-size: 1.6rem;
             font-weight: 600;
             color: #e2e8f0;
+            display: flex;
+            align-items: center;
         }
         
         .chart-container {
@@ -134,18 +136,18 @@
             background: rgba(15, 23, 42, 0.5);
             color: white;
             font-size: 1rem;
-            border: 1px solid rgba(124, 58, 237, 0.3);
+            border: 1px solid rgba(255, 126, 95, 0.3);
         }
         
         .form-group input:focus, 
         .form-group select:focus {
             outline: none;
             background: rgba(15, 23, 42, 0.7);
-            border: 1px solid rgba(124, 58, 237, 0.6);
+            border: 1px solid rgba(255, 126, 95, 0.6);
         }
         
         button {
-            background: linear-gradient(45deg, #8b5cf6, #0ea5e9);
+            background: linear-gradient(45deg, #ff7e5f, #feb47b);
             color: white;
             border: none;
             padding: 14px 25px;
@@ -160,7 +162,7 @@
         
         button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 5px 15px rgba(255, 126, 95, 0.4);
         }
         
         .inactive-table {
@@ -175,12 +177,12 @@
             text-align: left;
             font-weight: 600;
             color: #e2e8f0;
-            border-bottom: 2px solid rgba(124, 58, 237, 0.5);
+            border-bottom: 2px solid rgba(255, 126, 95, 0.5);
         }
         
         .inactive-table td {
             padding: 12px 15px;
-            border-bottom: 1px solid rgba(124, 58, 237, 0.2);
+            border-bottom: 1px solid rgba(255, 126, 95, 0.2);
             color: #cbd5e1;
         }
         
@@ -246,38 +248,130 @@
             padding: 20px;
             text-align: center;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(124, 58, 237, 0.2);
+            border: 1px solid rgba(255, 126, 95, 0.3);
             transition: transform 0.3s ease;
         }
         
         .stat-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 8px 20px rgba(255, 126, 95, 0.3);
         }
         
         .stat-card i {
             font-size: 2.5rem;
             margin-bottom: 15px;
-            background: linear-gradient(45deg, #8b5cf6, #0ea5e9);
+            background: linear-gradient(45deg, #ff7e5f, #feb47b);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-fill-color: transparent; /* add this for compatibility */
         }
-        
-        .stat-card .value {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 5px;
-            background: linear-gradient(to right, #8b5cf6, #0ea5e9);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+
+.stat-card .value {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    background: linear-gradient(to right, #ff7e5f, #feb47b);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-fill-color: transparent; /* add this for compatibility */
+}
         
         .stat-card .label {
             font-size: 1rem;
             opacity: 0.8;
             color: #cbd5e1;
+        }
+        
+        .btn-icon {
+            background: rgba(15, 23, 42, 0.5);
+            color: #ff7e5f;
+            border: 1px solid rgba(255, 126, 95, 0.3);
+            border-radius: 8px;
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-icon:hover {
+            background: rgba(255, 126, 95, 0.2);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        
+        .checkin-btn {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        
+        .checkin-btn:hover {
+            background: rgba(16, 185, 129, 0.3);
+        }
+        
+        .delete-btn {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        
+        .delete-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 126, 95, 0.3);
+        }
+        
+        .tab.active {
+            background: rgba(255, 126, 95, 0.3);
+            border-color: #ff7e5f;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .dashboard-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #feb47b;
+            font-size: 1.8rem;
         }
         
         @media (max-width: 900px) {
@@ -287,6 +381,10 @@
             
             .data-entry {
                 grid-column: span 1;
+            }
+            
+            header h1 {
+                font-size: 2.2rem;
             }
         }
     </style>
@@ -298,178 +396,253 @@
     
     <div class="container">
         <header>
-            <h1><i class="fas fa-dumbbell"></i> MMA Gym Analytics Dashboard</h1>
+            <h1><i class="fas fa-dumbbell"></i> MMA - Gym Management</h1>
             <p>Track member attendance, facility usage, and membership trends</p>
         </header>
         
         <div class="stats-container">
             <div class="stat-card">
                 <i class="fas fa-users"></i>
-                <div class="value">124</div>
+                <div class="value" id="totalMembers">0</div>
                 <div class="label">Total Members</div>
             </div>
             <div class="stat-card">
                 <i class="fas fa-calendar-check"></i>
-                <div class="value">83%</div>
+                <div class="value" id="attendanceRate">0%</div>
                 <div class="label">Monthly Attendance</div>
             </div>
             <div class="stat-card">
                 <i class="fas fa-running"></i>
-                <div class="value">90</div>
+                <div class="value" id="avgCheckins">0</div>
                 <div class="label">Avg. Daily Check-ins</div>
             </div>
             <div class="stat-card">
                 <i class="fas fa-sync-alt"></i>
-                <div class="value">60%</div>
+                <div class="value" id="renewalRate">0%</div>
                 <div class="label">Renewal Rate</div>
             </div>
         </div>
         
-        <div class="dashboard-grid">
-            <!-- Daily Check-ins Chart -->
-            <div class="card">
-                <div class="card-header">
-                    <i class="fas fa-chart-line"></i>
-                    <h2>Daily Check-ins</h2>
+        <div class="tabs">
+            <div class="tab active" data-tab="dashboard">Dashboard</div>
+            <div class="tab" data-tab="members">Members</div>
+            <div class="tab" data-tab="add">Add Member</div>
+        </div>
+        
+        <div class="tab-content active" id="dashboard-tab">
+            <div class="dashboard-title">Gym Performance Dashboard</div>
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chart-line"></i> Daily Check-ins</h2>
+                        <button class="btn-icon" id="refreshChart">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="lineChart"></canvas>
+                    </div>
                 </div>
-                <div class="chart-container">
-                    <canvas id="lineChart"></canvas>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chart-bar"></i> Popular Gym Areas</h2>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chart-pie"></i> Membership Types</h2>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-exclamation-triangle"></i> Inactive Members</h2>
+                    </div>
+                    <div>
+                        <table class="inactive-table">
+                            <thead>
+                                <tr>
+                                    <th>Member ID</th>
+                                    <th>Name</th>
+                                    <th>Last Visit</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inactiveMembers">
+                                <!-- Dynamically populated -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-            
-            <!-- Popular Gym Areas -->
+        </div>
+        
+        <div class="tab-content" id="members-tab">
             <div class="card">
                 <div class="card-header">
-                    <i class="fas fa-chart-bar"></i>
-                    <h2>Popular Gym Areas</h2>
+                    <h2><i class="fas fa-users"></i> All Members</h2>
+                    <div>
+                        <input type="text" id="searchMembers" placeholder="Search members..." style="padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255, 126, 95, 0.3); background: rgba(15, 23, 42, 0.5); color: white;">
+                    </div>
                 </div>
-                <div class="chart-container">
-                    <canvas id="barChart"></canvas>
-                </div>
-            </div>
-            
-            <!-- Membership Types -->
-            <div class="card">
-                <div class="card-header">
-                    <i class="fas fa-chart-pie"></i>
-                    <h2>Membership Types</h2>
-                </div>
-                <div class="chart-container">
-                    <canvas id="pieChart"></canvas>
-                </div>
-            </div>
-            
-            <!-- Inactive Members -->
-            <div class="card">
-                <div class="card-header">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <h2>Inactive Members</h2>
-                </div>
-                <div>
+                <div style="overflow-x: auto;">
                     <table class="inactive-table">
                         <thead>
                             <tr>
-                                <th>Member ID</th>
+                                <th>ID</th>
                                 <th>Name</th>
+                                <th>Membership</th>
+                                <th>Join Date</th>
                                 <th>Last Visit</th>
                                 <th>Status</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="inactiveMembers">
-                            <tr>
-                                <td>M101</td>
-                                <td>Manish Kumar Mishra</td>
-                                <td>15 days ago</td>
-                                <td><span class="status-badge status-active">Active</span></td>
-                            </tr>
-                            <tr>
-                                <td>M105</td>
-                                <td>Manash Kumar Mishra</td>
-                                <td>32 days ago</td>
-                                <td><span class="status-badge status-inactive">Inactive</span></td>
-                            </tr>
-                            <tr>
-                                <td>M109</td>
-                                <td>Anish Kumar Mishra</td>
-                                <td>45 days ago</td>
-                                <td><span class="status-badge status-inactive">Inactive</span></td>
-                            </tr>
-                            <tr>
-                                <td>M112</td>
-                                <td>Mohan Mishra</td>
-                                <td>28 days ago</td>
-                                <td><span class="status-badge status-active">Active</span></td>
-                            </tr>
-                            <tr>
-                                <td>M115</td>
-                                <td>Mamta Mishra</td>
-                                <td>62 days ago</td>
-                                <td><span class="status-badge status-inactive">Inactive</span></td>
-                            </tr>
+                        <tbody id="allMembers">
+                            <!-- Dynamically populated -->
                         </tbody>
                     </table>
                 </div>
             </div>
-            
-            <!-- Data Entry Form -->
+        </div>
+        
+        <div class="tab-content" id="add-tab">
             <div class="card data-entry">
                 <div class="card-header">
-                    <i class="fas fa-edit"></i>
-                    <h2>Add New Check-in</h2>
+                    <h2><i class="fas fa-user-plus"></i> Add New Member</h2>
                 </div>
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="memberId">Member ID</label>
-                        <input type="text" id="memberId" placeholder="e.g., M101">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" placeholder="e.g., Raj Sharma">
                     </div>
                     <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" placeholder="e.g., Manish Kumar Mishra">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="e.g., raj.sharma@example.com">
                     </div>
                     <div class="form-group">
-                        <label for="checkInDate">Check-in Date</label>
-                        <input type="date" id="checkInDate">
+                        <label for="phone">Phone</label>
+                        <input type="tel" id="phone" placeholder="e.g., +91 9876543210">
                     </div>
                     <div class="form-group">
-                        <label for="areaUsed">Area Used</label>
-                        <select id="areaUsed">
-                            <option value="Cardio">Cardio Area</option>
-                            <option value="Weights">Weights Area</option>
-                            <option value="Pool">Swimming Pool</option>
-                            <option value="Yoga">Yoga Studio</option>
-                            <option value="Crossfit">Crossfit Zone</option>
-                        </select>
+                        <label for="joinDate">Join Date</label>
+                        <input type="date" id="joinDate">
                     </div>
                     <div class="form-group">
                         <label for="membershipType">Membership Type</label>
                         <select id="membershipType">
-                            <option value="Premium">Premium</option>
-                            <option value="Standard">Standard</option>
-                            <option value="Student">Student</option>
-                            <option value="Corporate">Corporate</option>
-                            <option value="Senior">Senior</option>
+                            <option value="Premium">Premium (₹2999/month)</option>
+                            <option value="Standard">Standard (₹1999/month)</option>
+                            <option value="Student">Student (₹1499/month)</option>
+                            <option value="Corporate">Corporate (₹2499/month)</option>
+                            <option value="Senior">Senior (₹1799/month)</option>
                         </select>
                     </div>
-                    <button id="addDataBtn"><i class="fas fa-plus-circle"></i> Add Check-in Data</button>
+                    <div class="form-group">
+                        <label for="trainer">Personal Trainer</label>
+                        <select id="trainer">
+                            <option value="None">None</option>
+                            <option value="Arjun Singh">Arjun Singh</option>
+                            <option value="Priya Patel">Priya Patel</option>
+                            <option value="Vikram Mehta">Vikram Mehta</option>
+                            <option value="Ananya Reddy">Ananya Reddy</option>
+                        </select>
+                    </div>
+                    <button id="addMemberBtn"><i class="fas fa-plus-circle"></i> Add Member</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Initialize charts with sample data
+        // Indian names for sample data
+        const indianNames = [
+            "Raj Sharma", "Priya Patel", "Vikram Singh", "Ananya Reddy", 
+            "Arjun Mehta", "Sunita Kumar", "Rahul Verma", "Kavita Joshi",
+            "Sanjay Gupta", "Meera Desai", "Amit Shah", "Neha Choudhury",
+            "Suresh Iyer", "Deepika Rao", "Mohan Das", "Shreya Malhotra",
+            "Nikhil Trivedi", "Pooja Nair", "Karan Kapoor", "Anjali Srinivasan"
+        ];
+
+        // Initialize data
+        let members = JSON.parse(localStorage.getItem('gymMembers')) || [];
+        let checkIns = JSON.parse(localStorage.getItem('gymCheckIns')) || [];
+        
+        // If no members, create sample data
+        if (members.length === 0) {
+            const today = new Date();
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(today.getDate() - 30);
+            
+            for (let i = 0; i < 8; i++) {
+                const joinDate = new Date();
+                joinDate.setDate(today.getDate() - Math.floor(Math.random() * 365));
+                
+                const lastVisit = new Date();
+                lastVisit.setDate(today.getDate() - Math.floor(Math.random() * 60));
+                
+                members.push({
+                    id: `M${100 + i}`,
+                    name: indianNames[i],
+                    email: `${indianNames[i].split(' ')[0].toLowerCase()}@example.com`,
+                    phone: `+91 9${Math.floor(Math.random() * 90000000 + 10000000)}`,
+                    joinDate: joinDate.toISOString().split('T')[0],
+                    membershipType: ['Premium', 'Standard', 'Student', 'Corporate', 'Senior'][Math.floor(Math.random() * 5)],
+                    trainer: ['None', 'Arjun Singh', 'Priya Patel', 'Vikram Mehta', 'Ananya Reddy'][Math.floor(Math.random() * 5)],
+                    lastVisit: lastVisit.toISOString().split('T')[0],
+                    status: Math.random() > 0.3 ? 'active' : 'inactive'
+                });
+            }
+            localStorage.setItem('gymMembers', JSON.stringify(members));
+        }
+        
+        // DOM Elements
+        const notification = document.getElementById('notification');
+        const totalMembersEl = document.getElementById('totalMembers');
+        const attendanceRateEl = document.getElementById('attendanceRate');
+        const avgCheckinsEl = document.getElementById('avgCheckins');
+        const renewalRateEl = document.getElementById('renewalRate');
+        const inactiveMembersEl = document.getElementById('inactiveMembers');
+        const allMembersEl = document.getElementById('allMembers');
+        const searchMembersEl = document.getElementById('searchMembers');
+        const refreshChartBtn = document.getElementById('refreshChart');
+        const addMemberBtn = document.getElementById('addMemberBtn');
+        const tabs = document.querySelectorAll('.tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        // Chart instances
+        let lineChart, barChart, pieChart;
+        
+        // Initialize the dashboard
         document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+            updateStats();
+            renderInactiveMembers();
+            renderAllMembers();
+            setupEventListeners();
+            setTodayAsDefault();
+        });
+        
+        function initCharts() {
             // Line Chart - Daily Check-ins
             const lineCtx = document.getElementById('lineChart').getContext('2d');
-            const lineChart = new Chart(lineCtx, {
+            lineChart = new Chart(lineCtx, {
                 type: 'line',
                 data: {
                     labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                     datasets: [{
                         label: 'Check-ins per Day',
-                        data: [85, 72, 86, 90, 110, 95, 80],
-                        borderColor: '#8b5cf6',
-                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        data: [45, 62, 78, 55, 90, 105, 80],
+                        borderColor: '#ff7e5f',
+                        backgroundColor: 'rgba(255, 126, 95, 0.1)',
                         borderWidth: 3,
                         tension: 0.3,
                         fill: true
@@ -492,7 +665,8 @@
                                 color: 'rgba(255, 255, 255, 0.1)'
                             },
                             ticks: {
-                                color: '#cbd5e1'
+                                color: '#cbd5e1',
+                                stepSize: 20
                             }
                         },
                         x: {
@@ -509,26 +683,26 @@
             
             // Bar Chart - Popular Gym Areas
             const barCtx = document.getElementById('barChart').getContext('2d');
-            const barChart = new Chart(barCtx, {
+            barChart = new Chart(barCtx, {
                 type: 'bar',
                 data: {
-                    labels: ['Cardio', 'Weights', 'Pool', 'Yoga', 'Crossfit'],
+                    labels: ['Cardio', 'Weights', 'Yoga', 'Crossfit', 'Zumba'],
                     datasets: [{
                         label: 'Usage Count',
-                        data: [120, 95, 70, 60, 85],
+                        data: [85, 70, 65, 50, 75],
                         backgroundColor: [
-                            'rgba(139, 92, 246, 0.7)',
-                            'rgba(14, 165, 233, 0.7)',
-                            'rgba(236, 72, 153, 0.7)',
-                            'rgba(16, 185, 129, 0.7)',
-                            'rgba(245, 158, 11, 0.7)'
+                            'rgba(255, 126, 95, 0.7)',
+                            'rgba(254, 180, 123, 0.7)',
+                            'rgba(100, 200, 150, 0.7)',
+                            'rgba(70, 130, 200, 0.7)',
+                            'rgba(200, 100, 200, 0.7)'
                         ],
                         borderColor: [
-                            'rgba(139, 92, 246, 1)',
-                            'rgba(14, 165, 233, 1)',
-                            'rgba(236, 72, 153, 1)',
-                            'rgba(16, 185, 129, 1)',
-                            'rgba(245, 158, 11, 1)'
+                            'rgba(255, 126, 95, 1)',
+                            'rgba(254, 180, 123, 1)',
+                            'rgba(100, 200, 150, 1)',
+                            'rgba(70, 130, 200, 1)',
+                            'rgba(200, 100, 200, 1)'
                         ],
                         borderWidth: 1
                     }]
@@ -548,7 +722,8 @@
                                 color: 'rgba(255, 255, 255, 0.1)'
                             },
                             ticks: {
-                                color: '#cbd5e1'
+                                color: '#cbd5e1',
+                                stepSize: 20
                             }
                         },
                         x: {
@@ -565,18 +740,18 @@
             
             // Pie Chart - Membership Types
             const pieCtx = document.getElementById('pieChart').getContext('2d');
-            const pieChart = new Chart(pieCtx, {
+            pieChart = new Chart(pieCtx, {
                 type: 'pie',
                 data: {
                     labels: ['Premium', 'Standard', 'Student', 'Corporate', 'Senior'],
                     datasets: [{
-                        data: [35, 25, 20, 15, 5],
+                        data: calculateMembershipDistribution(),
                         backgroundColor: [
-                            'rgba(139, 92, 246, 0.7)',
-                            'rgba(14, 165, 233, 0.7)',
-                            'rgba(236, 72, 153, 0.7)',
-                            'rgba(16, 185, 129, 0.7)',
-                            'rgba(245, 158, 11, 0.7)'
+                            'rgba(255, 126, 95, 0.7)',
+                            'rgba(254, 180, 123, 0.7)',
+                            'rgba(100, 200, 150, 0.7)',
+                            'rgba(70, 130, 200, 0.7)',
+                            'rgba(200, 100, 200, 0.7)'
                         ],
                         borderColor: [
                             'rgba(255, 255, 255, 0.8)'
@@ -598,82 +773,324 @@
                     }
                 }
             });
+        }
+        
+        function calculateMembershipDistribution() {
+            const counts = {
+                'Premium': 0,
+                'Standard': 0,
+                'Student': 0,
+                'Corporate': 0,
+                'Senior': 0
+            };
             
-            // Add data button functionality
-            document.getElementById('addDataBtn').addEventListener('click', function() {
-                const memberId = document.getElementById('memberId').value;
-                const name = document.getElementById('name').value;
-                const checkInDate = document.getElementById('checkInDate').value;
-                const areaUsed = document.getElementById('areaUsed').value;
-                const membershipType = document.getElementById('membershipType').value;
-                
-                if (!memberId || !name || !checkInDate) {
-                    showNotification('Please fill in all required fields', 'error');
-                    return;
-                }
-                
-                // Show success notification
-                showNotification('Check-in data added successfully!');
-                
-                // Reset form
-                document.getElementById('memberId').value = '';
-                document.getElementById('name').value = '';
-                document.getElementById('checkInDate').value = '';
-                document.getElementById('areaUsed').value = 'Cardio';
-                document.getElementById('membershipType').value = 'Premium';
-                
-                // Update charts with new data (simulated)
-                simulateDataUpdate();
+            members.forEach(member => {
+                counts[member.membershipType] = (counts[member.membershipType] || 0) + 1;
             });
             
-            // Set today's date as default for check-in date
+            return [
+                counts['Premium'],
+                counts['Standard'],
+                counts['Student'],
+                counts['Corporate'],
+                counts['Senior']
+            ];
+        }
+        
+        function setupEventListeners() {
+            // Tabs functionality
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    // Update active tab
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    // Show active content
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+            
+            // Add member button
+            addMemberBtn.addEventListener('click', addNewMember);
+            
+            // Search functionality
+            searchMembersEl.addEventListener('input', renderAllMembers);
+            
+            // Refresh chart
+            refreshChartBtn.addEventListener('click', refreshCharts);
+        }
+        
+        function setTodayAsDefault() {
             const today = new Date().toISOString().split('T')[0];
-            document.getElementById('checkInDate').value = today;
+            document.getElementById('joinDate').value = today;
+        }
+        
+        function addNewMember() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const joinDate = document.getElementById('joinDate').value;
+            const membershipType = document.getElementById('membershipType').value;
+            const trainer = document.getElementById('trainer').value;
             
-            // Notification function
-            function showNotification(message, type = 'success') {
-                const notification = document.getElementById('notification');
-                notification.textContent = message;
-                
-                // Set background color based on type
-                if (type === 'success') {
-                    notification.style.background = 'rgba(16, 185, 129, 0.9)';
-                    notification.classList.remove('error');
-                } else {
-                    notification.style.background = 'rgba(239, 68, 68, 0.9)';
-                    notification.classList.add('error');
-                }
-                
-                notification.classList.add('show');
-                
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                }, 3000);
+            if (!name || !email || !joinDate) {
+                showNotification('Please fill in all required fields', 'error');
+                return;
             }
             
-            // Simulate data update
-            function simulateDataUpdate() {
-                // Simulate updating the bar chart data
-                const barData = barChart.data.datasets[0].data;
-                for (let i = 0; i < barData.length; i++) {
-                    barData[i] += Math.floor(Math.random() * 5);
-                }
-                barChart.update();
+            // Create member object
+            const memberId = 'M' + (100 + members.length);
+            const newMember = {
+                id: memberId,
+                name,
+                email,
+                phone,
+                joinDate,
+                membershipType,
+                trainer,
+                lastVisit: null,
+                status: 'active'
+            };
+            
+            // Add to members array
+            members.push(newMember);
+            
+            // Save to localStorage
+            localStorage.setItem('gymMembers', JSON.stringify(members));
+            
+            // Show success message
+            showNotification(`Member ${name} added successfully!`);
+            
+            // Reset form
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('joinDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('membershipType').value = 'Premium';
+            document.getElementById('trainer').value = 'None';
+            
+            // Update UI
+            updateStats();
+            renderInactiveMembers();
+            renderAllMembers();
+            updateCharts();
+        }
+        
+        function updateStats() {
+            // Update stats based on members data
+            totalMembersEl.textContent = members.length;
+            
+            // Calculate attendance rate (simplified)
+            const activeMembers = members.filter(m => m.status === 'active').length;
+            const attendanceRate = members.length > 0 ? Math.round((activeMembers / members.length) * 100) : 0;
+            attendanceRateEl.textContent = `${attendanceRate}%`;
+            
+            // Calculate average check-ins (simplified)
+            const today = new Date();
+            const lastWeek = new Date(today);
+            lastWeek.setDate(today.getDate() - 7);
+            
+            const recentCheckins = members.filter(m => {
+                if (!m.lastVisit) return false;
+                const lastVisitDate = new Date(m.lastVisit);
+                return lastVisitDate >= lastWeek;
+            }).length;
+            
+            const avgCheckins = Math.round(recentCheckins / 7);
+            avgCheckinsEl.textContent = avgCheckins;
+            
+            // Calculate renewal rate (simplified)
+            const renewalRate = members.length > 0 ? Math.round((activeMembers / members.length) * 100) : 0;
+            renewalRateEl.textContent = `${renewalRate}%`;
+        }
+        
+        function renderInactiveMembers() {
+            // Find inactive members (last visit > 30 days ago)
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            
+            const inactiveMembers = members.filter(member => {
+                if (!member.lastVisit) return true;
+                const lastVisitDate = new Date(member.lastVisit);
+                return lastVisitDate < thirtyDaysAgo;
+            });
+            
+            // Sort by most inactive
+            inactiveMembers.sort((a, b) => {
+                const aDate = a.lastVisit ? new Date(a.lastVisit) : new Date(0);
+                const bDate = b.lastVisit ? new Date(b.lastVisit) : new Date(0);
+                return aDate - bDate;
+            });
+            
+            // Render to table
+            let html = '';
+            inactiveMembers.slice(0, 5).forEach(member => {
+                const lastVisit = member.lastVisit ? 
+                    `${Math.floor((new Date() - new Date(member.lastVisit)) / (1000 * 60 * 60 * 24))} days ago` : 
+                    'Never';
                 
-                // Simulate updating the line chart data
-                const lineData = lineChart.data.datasets[0].data;
-                const lastValue = lineData[lineData.length - 1];
-                lineData.shift();
-                lineData.push(lastValue + Math.floor(Math.random() * 10));
-                lineChart.update();
+                html += `
+                    <tr>
+                        <td>${member.id}</td>
+                        <td>${member.name}</td>
+                        <td>${lastVisit}</td>
+                        <td><span class="status-badge status-inactive">Inactive</span></td>
+                    </tr>
+                `;
+            });
+            
+            inactiveMembersEl.innerHTML = html || `<tr><td colspan="4" style="text-align: center;">No inactive members</td></tr>`;
+        }
+        
+        function renderAllMembers() {
+            const searchTerm = searchMembersEl.value.toLowerCase();
+            
+            // Filter members based on search term
+            const filteredMembers = members.filter(member => 
+                member.name.toLowerCase().includes(searchTerm) || 
+                member.id.toLowerCase().includes(searchTerm) ||
+                member.email.toLowerCase().includes(searchTerm)
+            );
+            
+            // Render to table
+            let html = '';
+            filteredMembers.forEach(member => {
+                const lastVisit = member.lastVisit ? 
+                    new Date(member.lastVisit).toLocaleDateString() : 
+                    'Never';
                 
-                // Simulate updating the pie chart
-                const pieData = pieChart.data.datasets[0].data;
-                const randomIndex = Math.floor(Math.random() * pieData.length);
-                pieData[randomIndex] += 2;
-                pieChart.update();
+                const joinDate = new Date(member.joinDate).toLocaleDateString();
+                
+                html += `
+                    <tr>
+                        <td>${member.id}</td>
+                        <td>${member.name}</td>
+                        <td>${member.membershipType}</td>
+                        <td>${joinDate}</td>
+                        <td>${lastVisit}</td>
+                        <td>
+                            <span class="status-badge ${member.status === 'active' ? 'status-active' : 'status-inactive'}">
+                                ${member.status === 'active' ? 'Active' : 'Inactive'}
+                            </span>
+                        </td>
+                        <td class="action-buttons">
+                            <button class="action-btn checkin-btn" data-id="${member.id}">
+                                <i class="fas fa-check"></i> Check-in
+                            </button>
+                            <button class="action-btn delete-btn" data-id="${member.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            allMembersEl.innerHTML = html || `<tr><td colspan="7" style="text-align: center;">No members found</td></tr>`;
+            
+            // Add event listeners to buttons
+            document.querySelectorAll('.checkin-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const memberId = e.target.closest('button').getAttribute('data-id');
+                    checkInMember(memberId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const memberId = e.target.closest('button').getAttribute('data-id');
+                    deleteMember(memberId);
+                });
+            });
+        }
+        
+        function checkInMember(memberId) {
+            const member = members.find(m => m.id === memberId);
+            if (member) {
+                // Update last visit to today
+                member.lastVisit = new Date().toISOString().split('T')[0];
+                member.status = 'active';
+                
+                // Save to localStorage
+                localStorage.setItem('gymMembers', JSON.stringify(members));
+                
+                // Show notification
+                showNotification(`${member.name} checked in successfully!`);
+                
+                // Update UI
+                updateStats();
+                renderInactiveMembers();
+                renderAllMembers();
+                updateCharts();
             }
-        });
+        }
+        
+        function deleteMember(memberId) {
+            if (confirm('Are you sure you want to delete this member?')) {
+                members = members.filter(m => m.id !== memberId);
+                
+                // Save to localStorage
+                localStorage.setItem('gymMembers', JSON.stringify(members));
+                
+                // Show notification
+                showNotification('Member deleted successfully!');
+                
+                // Update UI
+                updateStats();
+                renderInactiveMembers();
+                renderAllMembers();
+                updateCharts();
+            }
+        }
+        
+        function refreshCharts() {
+            // Update pie chart with latest membership distribution
+            pieChart.data.datasets[0].data = calculateMembershipDistribution();
+            pieChart.update();
+            
+            // Simulate updating charts with new data
+            const barData = barChart.data.datasets[0].data;
+            for (let i = 0; i < barData.length; i++) {
+                barData[i] = Math.max(40, Math.min(120, barData[i] + Math.floor(Math.random() * 10 - 3)));
+            }
+            barChart.update();
+            
+            // Simulate updating the line chart data
+            const lineData = lineChart.data.datasets[0].data;
+            const lastValue = lineData[lineData.length - 1];
+            lineData.shift();
+            lineData.push(Math.max(30, Math.min(120, lastValue + Math.floor(Math.random() * 20 - 5))));
+            lineChart.update();
+            
+            showNotification('Charts refreshed with latest data');
+        }
+        
+        function updateCharts() {
+            // Update pie chart with latest membership distribution
+            pieChart.data.datasets[0].data = calculateMembershipDistribution();
+            pieChart.update();
+        }
+        
+        function showNotification(message, type = 'success') {
+            notification.textContent = message;
+            
+            // Set background color based on type
+            if (type === 'success') {
+                notification.style.background = 'rgba(16, 185, 129, 0.9)';
+                notification.classList.remove('error');
+            } else {
+                notification.style.background = 'rgba(239, 68, 68, 0.9)';
+                notification.classList.add('error');
+            }
+            
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
     </script>
 </body>
 </html>
